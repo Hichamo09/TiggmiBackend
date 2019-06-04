@@ -2,6 +2,13 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 require('dotenv').config();
+const admin = require("firebase-admin");
+const serviceAccount = require("./meetup-91213-firebase-adminsdk-xt8xt-34a92a8344.json");
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: "https://meetup-91213.firebaseio.com"
+});
 
 
 //routes
