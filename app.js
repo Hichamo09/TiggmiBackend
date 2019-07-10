@@ -21,7 +21,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use('/api', apiRoutes);
 
-
 app.listen(process.env.PORT, () => {
   console.log(`The App is running in localhost: ${process.env.PORT}`);
 })
