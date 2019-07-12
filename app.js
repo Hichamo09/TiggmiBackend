@@ -4,11 +4,41 @@ const cors = require('cors');
 require('dotenv').config();
 const admin = require("firebase-admin");
 const serviceAccount = require("./meetup-91213-firebase-adminsdk-xt8xt-34a92a8344.json");
+const johnny_five = require("johnny-five");
+const arduino_board = new johnny_five.Board({
+  port: "COM6"
+});
+
+
+arduino_board.on("ready", function() {
+   console.log("Blinking Program is Ready for use!");
+   
+});
+
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   databaseURL: "https://meetup-91213.firebaseio.com"
 });
+
+// // var ArduinoFirmata = require(__dirname+'/../');
+// var ArduinoFirmata = require('arduino-firmata');
+// var arduino = new ArduinoFirmata()
+// arduino.connect();
+//
+// arduino.on('connect', function(){
+//   console.log("connect!! "+arduino.serialport_name);
+//   console.log("board version: "+arduino.boardVersion);
+//
+//   var stat = true
+//   setInterval(function(){
+//     console.log(stat);
+//     arduino.digitalWrite(3, stat);
+//     arduino.digitalWrite(4, !stat);
+//     stat = !stat;  // blink
+//   }, 300);
+// });
+
 
 
 //routes
@@ -26,5 +56,6 @@ app.listen(process.env.PORT, () => {
 })
 
 app.get('/', (req, res) => {
+
   res.json('Hello World')
 })
