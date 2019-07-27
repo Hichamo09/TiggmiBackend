@@ -5,14 +5,12 @@ require('dotenv').config();
 const admin = require("firebase-admin");
 const serviceAccount = require("./meetup-91213-firebase-adminsdk-xt8xt-34a92a8344.json");
 const johnny_five = require("johnny-five");
-const arduino_board = new johnny_five.Board({
-  port: "COM6"
-});
+const arduino_board = new johnny_five.Board();
 
 
 arduino_board.on("ready", function() {
    console.log("Blinking Program is Ready for use!");
-   
+
 });
 
 

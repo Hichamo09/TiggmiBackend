@@ -36,10 +36,10 @@ module.exports = {
         }
         console.log('result', result);
         await admin.database().ref(ref).set(result);
-        var led = new johnny_five.Led(3);
+        var led = new johnny_five.Led(idOut);
         if (value === 1) led.on();
         if (value === 0) led.off();
-        return res.json({success: true, message: 'done'})
+        return res.json({success: true, message: 'done', result: result.pins})
       })
     })
 
