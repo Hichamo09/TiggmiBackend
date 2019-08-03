@@ -5,13 +5,18 @@ require('dotenv').config();
 const admin = require("firebase-admin");
 const serviceAccount = require("./meetup-91213-firebase-adminsdk-xt8xt-34a92a8344.json");
 const johnny_five = require("johnny-five");
-const arduino_board = new johnny_five.Board();
+const arduino_board = new johnny_five.Board({ port: "COM6"});
 
+const helpers = require('./lib/helpers');
+const cycles = require('./cron/cycles');
 
+let crons = [];
 arduino_board.on("ready", function() {
    console.log("Blinking Program is Ready for use!");
 
 });
+
+
 
 
 admin.initializeApp({
@@ -19,24 +24,17 @@ admin.initializeApp({
   databaseURL: "https://meetup-91213.firebaseio.com"
 });
 
-// // var ArduinoFirmata = require(__dirname+'/../');
-// var ArduinoFirmata = require('arduino-firmata');
-// var arduino = new ArduinoFirmata()
-// arduino.connect();
-//
-// arduino.on('connect', function(){
-//   console.log("connect!! "+arduino.serialport_name);
-//   console.log("board version: "+arduino.boardVersion);
-//
-//   var stat = true
-//   setInterval(function(){
-//     console.log(stat);
-//     arduino.digitalWrite(3, stat);
-//     arduino.digitalWrite(4, !stat);
-//     stat = !stat;  // blink
-//   }, 300);
-// });
-
+(function () {
+  let ref = `/users/${process.env.USER_ID}/cycles`;
+  admin.database().ref(ref).on("value", (snapshot) => {
+    crons = helpers.storeCycles(snapshot.val());
+    for (var i = 0; i < crons.length; i++) {
+      cycles.testCron(crons[i].startTime, process.env.USER_ID, crons[i].value, crons[i].pin, crons[i].id);
+    }
+  }, function (errorObject) {
+    console.log("The read failed: " + errorObject.code);
+  })
+})()
 
 
 //routes

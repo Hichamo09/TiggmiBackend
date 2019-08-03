@@ -3,7 +3,7 @@ const path = require('path');
 const appDir = path.dirname(require.main.filename);
 const admin = require("firebase-admin");
 const johnny_five = require("johnny-five");
-
+const helpers = require('../lib/helpers');
 
 
 
@@ -12,36 +12,10 @@ module.exports = {
     let { idOut, value, user_id, room_id } = req.query
     console.log('here');
     if (!idOut || !value) return res.json({success: false, message: "missing params"})
-    let entry = `value=${value} user=${user_id} date=${new Date().toString()} \n`
-    console.log('entry', entry);
-    if (value == "true" ) {
-      console.log('true');
-      value = 1
-    }else {
-      console.log('false');
-      value = 0
-    }
-    fs.appendFile(`${appDir}/log.txt`, entry, async function (err) {
-      if (err) return res.json({success: false, message: 'internal error'});
-      let ref = `/users/${user_id}/rooms/${room_id}/`
-      console.log('deooool');
-      admin.database().ref(ref).once("value",async (snapshot) => {
-        let result = snapshot.val();
-        let index = result.pins.findIndex((x) => {
-          return x.id == idOut
-        });
-        if (index > -1) {
-          console.log('value', value);
-          result.pins[index].value = parseInt(value);
-        }
-        console.log('result', result);
-        await admin.database().ref(ref).set(result);
-        var led = new johnny_five.Led(idOut);
-        if (value === 1) led.on();
-        if (value === 0) led.off();
-        return res.json({success: true, message: 'done', result: result.pins})
-      })
-    })
+
+    let result = helpers.makeCommand(value, idOut, user_id, room_id)
+    return res.json({success: true, message: 'done', result: result})
+
 
     // if (!idOut || !value) return res.json({success: false, message: "missing params"})
     // if (value == "true" ) {
