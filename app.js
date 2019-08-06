@@ -5,7 +5,7 @@ require('dotenv').config();
 const admin = require("firebase-admin");
 const serviceAccount = require("./meetup-91213-firebase-adminsdk-xt8xt-34a92a8344.json");
 const johnny_five = require("johnny-five");
-const arduino_board = new johnny_five.Board({});
+const arduino_board = new johnny_five.Board({ port: "COM6"});
 
 const helpers = require('./lib/helpers');
 const cycles = require('./cron/cycles');

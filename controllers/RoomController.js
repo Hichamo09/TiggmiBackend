@@ -8,13 +8,14 @@ const helpers = require('../lib/helpers');
 
 
 module.exports = {
-  updateStatus: (req, res) => {
+  updateStatus: async (req, res) => {
     let { idOut, value, user_id, room_id } = req.query
     console.log('here');
     if (!idOut || !value) return res.json({success: false, message: "missing params"})
 
-    let result = helpers.makeCommand(value, idOut, user_id, room_id)
-    return res.json({success: true, message: 'done', result: result})
+    let result = await helpers.makeCommand(value, idOut, user_id, room_id);
+    console.log('resut', result);
+    res.json({success: true, message: 'done', pins: result})
 
 
     // if (!idOut || !value) return res.json({success: false, message: "missing params"})
