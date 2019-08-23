@@ -7,11 +7,11 @@ module.exports = {
     let year = new Date().getFullYear(),
     month = new Date().getMonth(),
     day = new Date().getDate();
-    console.log(test.split(":")[0], test.split(":")[1]);
+    // console.log(test.split(":")[0], test.split(":")[1]);
     var date = new Date(year, month, day, test.split(":")[0], test.split(":")[1], 00);
 
-    console.log(new Date().toString());
-    console.log(date);
+    // console.log(new Date().toString());
+    // console.log(date);
     var j = schedule.scheduleJob(date, function(){
       console.log('The answer to life, the universe, and everything!');
       helpers.makeCommand(value, pin, user, room_id);

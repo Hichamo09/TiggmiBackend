@@ -9,9 +9,7 @@ const helpers = require('../lib/helpers');
 
 module.exports = {
   updateStatus: async (req, res) => {
-    module.exports.client.on('event', (data) => {
-      console.log('---------------yep is data ', data);
-    })
+
     let { idOut, value, user_id, room_id } = req.query
     console.log('here');
     if (!idOut || !value) return res.json({success: false, message: "missing params"})

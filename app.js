@@ -31,7 +31,18 @@ const cycles = require('./cron/cycles');
 let crons = [];
 arduino_board.on("ready", function() {
    console.log("Blinking Program is Ready for use!");
-
+   (function () {
+     let ref = `/users/${process.env.USER_ID}`;
+     admin.database().ref(ref).on("value", (snapshot) => {
+       helpers.initializeStatus(snapshot.val().rooms)
+       crons = helpers.storeCycles(snapshot.val().cycles);
+       for (var i = 0; i < crons.length; i++) {
+         cycles.testCron(crons[i].startTime, process.env.USER_ID, crons[i].value, crons[i].pin, crons[i].id);
+       }
+     }, function (errorObject) {
+       console.log("The read failed: " + errorObject.code);
+     })
+   })()
 });
 
 
@@ -42,18 +53,10 @@ admin.initializeApp({
   databaseURL: "https://meetup-91213.firebaseio.com"
 });
 
-(function () {
-  let ref = `/users/${process.env.USER_ID}/cycles`;
-  admin.database().ref(ref).on("value", (snapshot) => {
-    crons = helpers.storeCycles(snapshot.val());
-    for (var i = 0; i < crons.length; i++) {
-      cycles.testCron(crons[i].startTime, process.env.USER_ID, crons[i].value, crons[i].pin, crons[i].id);
-    }
-  }, function (errorObject) {
-    console.log("The read failed: " + errorObject.code);
-  })
-})()
 
+
+
+helpers.getLocalIp()
 
 //routes
 const apiRoutes = require('./routes/');
