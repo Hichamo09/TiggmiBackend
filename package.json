@@ -18,10 +18,10 @@
   "homepage": "https://github.com/boudlal/tiggmi-server#readme",
   "dependencies": {
     "arduino-firmata": "^0.3.4",
-    "body-parser": "^1.19.0",
+    "body-parser": "^1.20.1",
     "cors": "^2.8.5",
     "dotenv": "^8.0.0",
-    "express": "^4.17.1",
+    "express": "^4.18.2",
     "firebase-admin": "^8.0.0",
     "firmata": "^2.0.0",
     "johnny-five": "^1.1.0",
